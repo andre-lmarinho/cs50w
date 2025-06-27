@@ -1,0 +1,142 @@
+/* style.css */
+
+/*--------------------------------------
+  CSS Variables
+--------------------------------------*/
+:root {
+  --bg-color:        #fff;
+  --text-color:      #202124;
+  --input-border:    #dfe1e5;
+  --input-shadow:    rgba(32, 33, 36, 0.28);
+  --button-bg:       #f8f9fa;
+  --button-hover-bg: #f1f3f4;
+  --button-color:    #3c4043;
+  --button-border:   #f8f9fa;
+}
+
+/*--------------------------------------
+  Reset & Full-Height Layout
+--------------------------------------*/
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+/*--------------------------------------
+  Navigation (all pages)
+--------------------------------------*/
+.nav {
+  padding: 1rem;
+  text-align: right;
+}
+
+.nav a {
+  margin-left: 1rem;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+/*--------------------------------------
+  Main container (centers content)
+--------------------------------------*/
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+/*--------------------------------------
+  Form styling (all pages)
+--------------------------------------*/
+form {
+  width: 100%;
+  max-width: 554px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Advanced-page labels */
+form label {
+  align-self: flex-start;
+  margin: 0.75rem 0 0.5rem;
+  font-size: 0.875rem;
+}
+
+/*--------------------------------------
+  Text inputs
+--------------------------------------*/
+input[type="text"] {
+  width: 100%;
+  height: 44px;
+  padding: 4px 14px;
+  font-size: 16px;
+  border: 1px solid var(--input-border);
+  border-radius: 26px;
+  box-shadow: 0 1px 6px var(--input-shadow);
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+
+input[type="text"]:focus {
+  box-shadow: 0 1px 6px var(--input-shadow);
+}
+
+/*--------------------------------------
+  Button group (index & images pages)
+--------------------------------------*/
+.buttons {
+  margin-top: 12px;
+  padding-top: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+/*--------------------------------------
+  Submit buttons (all pages)
+--------------------------------------*/
+input[type="submit"] {
+  margin: 0 6px;
+  height: 36px;
+  padding: 0 16px;
+  font-size: 14px;
+  background: var(--button-bg);
+  border: 1px solid var(--button-border);
+  border-radius: 4px;
+  color: var(--button-color);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+input[type="submit"]:hover {
+  background: var(--button-hover-bg);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/*--------------------------------------
+  Advanced-page specific: align submit
+--------------------------------------*/
+.advanced-page input[type="submit"] {
+  align-self: flex-start;
+  margin-top: 1rem;
+}
+
+/*--------------------------------------
+  Hide hidden inputs (images page)
+--------------------------------------*/
+.images-page input[type="hidden"] {
+  display: none;
+}

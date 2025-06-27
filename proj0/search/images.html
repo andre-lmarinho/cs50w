@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Image Search Clone</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Link back to main search -->
+  <header class="nav">
+    <nav>
+      <a href="index.html">Search</a>
+    </nav>
+  </header>
+
+  <!-- Image search form -->
+  <main class="search-page">
+    <form action="https://www.google.com/search" method="get">
+      <!-- Hidden parameter to trigger image search -->
+      <input type="hidden" name="tbm" value="isch">
+      <!-- User’s image query -->
+      <input type="text" name="q" placeholder="Search Images">
+      <div class="buttons">
+        <input type="submit" value="Search Images">
+      </div>
+    </form>
+  </main>
+</body>
+</html>

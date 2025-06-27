@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Search Clone</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top navigation: links to Images and Advanced Search -->
+  <header class="nav">
+    <nav>
+      <a href="images.html">Images</a>
+      <a href="advanced.html">Advanced Search</a>
+    </nav>
+  </header>
+
+  <!-- Centered search form -->
+  <main class="search-page">
+    <form action="https://www.google.com/search" method="get">
+      <!-- User’s query -->
+      <input type="text" name="q" placeholder="Search Google">
+
+      <!-- Submit buttons -->
+      <div class="buttons">
+        <!-- Regular search -->
+        <input type="submit" value="Google Search">
+        <!-- “I’m Feeling Lucky” -->
+        <input type="submit" name="btnI" value="I'm Feeling Lucky">
+      </div>
+    </form>
+  </main>
+</body>
+</html>
