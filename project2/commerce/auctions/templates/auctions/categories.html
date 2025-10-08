@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}Categories | {{ block.super }}{% endblock %}
+
+{% block body %}
+    <h2 class="mb-4">Categories</h2>
+
+    {% if categories %}
+        <div class="list-group">
+            {% for category in categories %}
+                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{% url 'category_detail' category.id %}">
+                    {{ category.name }}
+                    <span class="badge badge-primary badge-pill">
+                        {{ category.active_count }} active
+                    </span>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">No categories yet.</div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,32 @@
+body {
+    padding-top: 20px;
+}
+
+.listing-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.listing-card .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.listing-card .card-body .btn {
+    margin-top: auto;
+}
+
+.listing-image {
+    max-height: 220px;
+    object-fit: cover;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.list-group-item-action {
+    cursor: pointer;
+}

@@ -1,0 +1,67 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div id="page-root"
+     data-feed="{{ feed }}"
+     data-profile="{{ profile_username|default:'' }}">
+
+    {% if feed == "profile" %}
+        <div id="profile-header" class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="mb-1" id="profile-username"></h2>
+                        <p class="mb-0 text-muted">
+                            <span id="profile-followers">0</span> follower<span id="profile-followers-plural">s</span> ·
+                            <span id="profile-following">0</span> following
+                        </p>
+                    </div>
+                    {% if user.is_authenticated %}
+                        <button id="follow-toggle"
+                                class="btn btn-primary"
+                                style="display: none;">
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if user.is_authenticated and feed != "profile" %}
+        <div class="card mb-4" id="new-post-card">
+            <div class="card-body">
+                <h5 class="card-title">Create a Post</h5>
+                <form id="new-post-form">
+                    <div class="form-group">
+                        <textarea class="form-control"
+                                  id="new-post-content"
+                                  rows="3"
+                                  placeholder="What's on your mind?"
+                                  maxlength="1024"
+                                  required></textarea>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <span id="char-count">0</span>/1024
+                        </small>
+                        <button type="submit" class="btn btn-primary">Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+
+    <div id="alert-container" class="mb-3"></div>
+
+    <div id="posts-container" class="list-group"></div>
+
+    <nav aria-label="Pagination" class="mt-4">
+        <ul class="pagination justify-content-center" id="pagination"></ul>
+    </nav>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/network.js' %}"></script>
+{% endblock %}

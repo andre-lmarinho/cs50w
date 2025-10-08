@@ -1,0 +1,56 @@
+body {
+    padding: 20px 0;
+}
+
+textarea {
+    min-height: 400px;
+}
+
+.mailbox-list .email-row {
+    text-align: left;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.mailbox-list .email-row:hover {
+    background-color: #f5f7fa;
+}
+
+.email-row.email-read {
+    background-color: #f1f3f5;
+    font-weight: 400;
+}
+
+.email-row .email-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.email-row .email-counterpart {
+    font-weight: 600;
+}
+
+.email-row.email-read .email-counterpart {
+    font-weight: 500;
+}
+
+.email-row .email-subject {
+    color: #495057;
+}
+
+.email-row .email-timestamp {
+    font-size: 0.875rem;
+}
+
+.email-details {
+    margin-top: 1rem;
+}
+
+.email-body {
+    white-space: pre-wrap;
+    padding: 1.5rem;
+}
+
+#alert-container .alert {
+    margin-bottom: 0;
+}

@@ -1,0 +1,50 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}Watchlist | {{ block.super }}{% endblock %}
+
+{% block body %}
+    <h2 class="mb-4">My Watchlist</h2>
+
+    {% if listings %}
+        <div class="row">
+            {% for listing in listings %}
+                <div class="col-md-6 col-lg-4 d-flex">
+                    <div class="card listing-card mb-4 flex-fill">
+                        {% if listing.image_url %}
+                            <img src="{{ listing.image_url }}" class="card-img-top listing-image" alt="{{ listing.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ listing.title }}</h5>
+                            {% if listing.category %}
+                                <span class="badge badge-secondary">{{ listing.category.name }}</span>
+                            {% endif %}
+                            <p class="card-text text-muted">{{ listing.description|truncatechars:120 }}</p>
+                            <p class="card-text font-weight-bold mb-1">
+                                Current Price: ${{ listing.current_price|floatformat:2 }}
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    {{ listing.bids.count }} bid{{ listing.bids.count|pluralize }}
+                                </small>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a class="btn btn-primary btn-sm" href="{% url 'listing_detail' listing.id %}">View Listing</a>
+                                <form method="post" action="{% url 'toggle_watchlist' listing.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next" value="{% url 'watchlist' %}">
+                                    <button class="btn btn-outline-danger btn-sm" type="submit">
+                                        Remove
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Your watchlist is empty. Explore <a href="{% url 'index' %}">active listings</a> to add some!
+        </div>
+    {% endif %}
+{% endblock %}
