@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Dashboard" %} · Finance Manager{% endblock %}
+
+{% block extra_head %}
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" as="script" crossorigin>
+{% endblock %}
+
+{% block content %}
+<div
+  id="dashboard-app"
+  data-summary-url="{% url 'finance:api_dashboard_summary' %}"
+  data-accounts-url="{% url 'finance:api_dashboard_accounts' %}"
+  data-spending-url="{% url 'finance:api_dashboard_spending' %}"
+  data-cashflow-url="{% url 'finance:api_dashboard_cashflow' %}"
+  class="dashboard"
+>
+  <section class="row g-3 mb-4" aria-label="{% trans 'Financial summary' %}">
+    <div class="col-12 col-md-6 col-xl-3">
+      <div class="card metric-card shadow-sm h-100" role="group" aria-labelledby="metric-total-accounts">
+        <div class="card-body">
+          <h2 class="metric-label" id="metric-total-accounts">{% trans "Accounts" %}</h2>
+          <p class="metric-value" id="summary-total-accounts" aria-live="polite">{{ total_accounts }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+      <div class="card metric-card shadow-sm h-100" role="group" aria-labelledby="metric-total-transactions">
+        <div class="card-body">
+          <h2 class="metric-label" id="metric-total-transactions">{% trans "Transactions" %}</h2>
+          <p class="metric-value" id="summary-total-transactions" aria-live="polite">{{ total_transactions }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+      <div class="card metric-card shadow-sm h-100" role="group" aria-labelledby="metric-total-balance">
+        <div class="card-body">
+          <h2 class="metric-label" id="metric-total-balance">{% trans "Total balance" %}</h2>
+          <p class="metric-value" id="summary-total-balance" data-currency="{{ primary_currency }}" aria-live="polite">
+            {{ total_balance|floatformat:2 }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+      <div class="card metric-card shadow-sm h-100" role="group" aria-labelledby="metric-monthly-net">
+        <div class="card-body">
+          <h2 class="metric-label" id="metric-monthly-net">{% trans "Net this month" %}</h2>
+          <p class="metric-value" id="summary-monthly-net" data-currency="{{ primary_currency }}" aria-live="polite">
+            {{ monthly_net|floatformat:2 }}
+          </p>
+          <p class="metric-subtext mb-0" id="summary-monthly-breakdown">
+            <span class="text-success">+{{ monthly_income|floatformat:2 }}</span> /
+            <span class="text-danger">-{{ monthly_expense|floatformat:2 }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="row g-4 mb-4" aria-label="{% trans 'Dashboard charts' %}">
+    <div class="col-12 col-xl-4">
+      <div class="card border-0 shadow-sm chart-card h-100">
+        <div class="card-body">
+          <h3 class="card-title h5">{% trans "Balance by account" %}</h3>
+          <div class="chart-container">
+            <canvas id="accounts-chart" role="img" aria-label="Chart displaying current balance by account"></canvas>
+            <p class="chart-empty text-muted" id="accounts-chart-empty">{% trans "Add accounts to see this breakdown." %}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-4">
+      <div class="card border-0 shadow-sm chart-card h-100">
+        <div class="card-body">
+          <h3 class="card-title h5">{% trans "Spending by category" %}</h3>
+          <div class="chart-container">
+            <canvas id="spending-chart" role="img" aria-label="Chart displaying spending by category"></canvas>
+            <p class="chart-empty text-muted" id="spending-chart-empty">{% trans "No expenses recorded for the selected period." %}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-4">
+      <div class="card border-0 shadow-sm chart-card h-100">
+        <div class="card-body">
+          <h3 class="card-title h5">{% trans "Cash flow (last 6 months)" %}</h3>
+          <div class="chart-container">
+            <canvas id="cashflow-chart" role="img" aria-label="Chart displaying income and expenses over time"></canvas>
+            <p class="chart-empty text-muted" id="cashflow-chart-empty">{% trans "More transactions are needed to show trends." %}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="row g-4" aria-label="{% trans 'Recent activity' %}">
+    <div class="col-12 col-xl-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="card-title h5 mb-0">{% trans "Accounts" %}</h3>
+            <a href="{% url 'finance:account_list' %}" class="btn btn-sm btn-outline-primary">{% trans "Manage" %}</a>
+          </div>
+          {% if accounts %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle" aria-label="{% trans 'Accounts overview' %}">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">{% trans "Name" %}</th>
+                  <th scope="col">{% trans "Type" %}</th>
+                  <th scope="col">{% trans "Currency" %}</th>
+                  <th scope="col" class="text-end">{% trans "Current balance" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for account in accounts %}
+                <tr>
+                  <th scope="row">{{ account.name }}</th>
+                  <td>{{ account.get_account_type_display }}</td>
+                  <td>{{ account.currency }}</td>
+                  <td class="text-end">{{ account.current_balance }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <p class="text-muted mb-0">{% trans "No accounts yet. Start by adding your first account." %}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-xl-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="card-title h5 mb-0">{% trans "Recent transactions" %}</h3>
+            <a href="{% url 'finance:transaction_list' %}" class="btn btn-sm btn-outline-primary">{% trans "View all" %}</a>
+          </div>
+          {% if recent_transactions %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle" aria-label="{% trans 'Recent transactions' %}">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">{% trans "Date" %}</th>
+                  <th scope="col">{% trans "Description" %}</th>
+                  <th scope="col">{% trans "Account" %}</th>
+                  <th scope="col" class="text-end">{% trans "Amount" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for transaction in recent_transactions %}
+                <tr>
+                  <td>{{ transaction.date }}</td>
+                  <td>{{ transaction.description|default:"(no description)" }}</td>
+                  <td>{{ transaction.account.name }}</td>
+                  <td class="text-end">
+                    {% if transaction.is_expense %}-{% endif %}{{ transaction.amount }} {{ transaction.currency }}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <p class="text-muted mb-0">{% trans "You do not have transactions yet." %}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-xl-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="card-title h5 mb-0">{% trans "Budgets" %}</h3>
+            <a href="{% url 'finance:budget_list' %}" class="btn btn-sm btn-outline-primary">{% trans "Manage" %}</a>
+          </div>
+          {% if budget_progress %}
+          <div class="list-group list-group-flush">
+            {% for item in budget_progress %}
+            <div class="list-group-item">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-semibold">{{ item.budget.name }}</span>
+                <span class="{% if item.over %}text-danger{% endif %}">
+                  {{ item.spent|floatformat:2 }} / {{ item.budget.amount|floatformat:2 }} {{ user_currency }}
+                </span>
+              </div>
+              <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ item.percentage|floatformat:0 }}">
+                <div class="progress-bar {% if item.over %}bg-danger{% else %}bg-success{% endif %}" style="width: {{ item.percentage|floatformat:0 }}%;">
+                  <span class="visually-hidden">{{ item.percentage|floatformat:0 }}%</span>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p class="text-muted mb-0">{% trans "Create a budget to keep spending under control." %}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" crossorigin="anonymous" defer></script>
+  <script src="{% static 'js/dashboard.js' %}" defer></script>
+{% endblock %}

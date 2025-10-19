@@ -1,0 +1,130 @@
+body {
+  background-color: #f6f8fb;
+}
+
+.card {
+  border-radius: 0.75rem;
+}
+
+form input:not([type="checkbox"]),
+form select,
+form textarea {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d0d5dd;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+.navbar-brand {
+  font-weight: 700;
+}
+
+.metric-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+}
+
+.metric-value {
+  font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.metric-subtext {
+  font-size: 0.875rem;
+}
+
+.chart-card .card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-container {
+  position: relative;
+  min-height: 260px;
+}
+
+.chart-empty {
+  margin-top: 1rem;
+}
+
+@media (max-width: 575.98px) {
+  .metric-card {
+    text-align: center;
+  }
+  .chart-container {
+    min-height: 220px;
+  }
+}
+
+
+body.theme-dark {
+  background-color: #121212;
+  color: #f1f5f9;
+}
+
+body.theme-dark .card {
+  background-color: #1e1e2f;
+  color: inherit;
+}
+
+body.theme-dark .navbar {
+  background-color: #111b3f !important;
+}
+
+body.theme-dark .table {
+  color: #f1f5f9;
+}
+
+body.theme-dark .table thead {
+  background-color: #252546;
+}
+
+body.theme-dark .table-hover tbody tr:hover {
+  color: inherit;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.theme-dark .progress {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.theme-dark .metric-card {
+  background: linear-gradient(135deg, #1e1e2f 0%, #23234a 100%);
+}
+
+.tag-badge {
+  background-color: #e9ecef;
+  color: #495057;
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+body.theme-dark .tag-badge {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+}
+
+.attachment-link {
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.attachment-link:hover {
+  text-decoration: underline;
+}

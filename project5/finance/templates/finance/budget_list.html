@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Budgets" %} · Finance Manager{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="h3 mb-1">{% trans "Budgets" %}</h1>
+    <p class="text-muted mb-0">{% trans "Keep track of your spending limits and monitor progress." %}</p>
+  </div>
+  <a href="{% url 'finance:budget_create' %}" class="btn btn-primary">{% trans "New budget" %}</a>
+</div>
+
+{% if budget_data %}
+<div class="table-responsive">
+  <table class="table table-hover align-middle" aria-label="{% trans 'Budgets overview' %}">
+    <thead class="table-light">
+      <tr>
+        <th scope="col">{% trans "Name" %}</th>
+        <th scope="col">{% trans "Category" %}</th>
+        <th scope="col">{% trans "Amount" %}</th>
+        <th scope="col">{% trans "Spent" %}</th>
+        <th scope="col">{% trans "Progress" %}</th>
+        <th scope="col" class="text-end">{% trans "Actions" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in budget_data %}
+      <tr>
+        <th scope="row">{{ item.object.name }}</th>
+        <td>{% if item.object.category %}{{ item.object.category }}{% else %}{% trans "All expenses" %}{% endif %}</td>
+        <td>{{ item.object.amount|floatformat:2 }} {{ user_currency }}</td>
+        <td>{{ item.spent|floatformat:2 }} {{ user_currency }}</td>
+        <td style="width: 220px;">
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ item.percentage|floatformat:0 }}">
+            <div class="progress-bar {% if item.over %}bg-danger{% else %}bg-success{% endif %}" style="width: {{ item.percentage|floatformat:0 }}%">
+              <span class="visually-hidden">{{ item.percentage|floatformat:0 }}%</span>
+            </div>
+          </div>
+        </td>
+        <td class="text-end">
+          <div class="btn-group btn-group-sm">
+            <a href="{% url 'finance:budget_update' item.object.pk %}" class="btn btn-outline-secondary">{% trans "Edit" %}</a>
+            <a href="{% url 'finance:budget_delete' item.object.pk %}" class="btn btn-outline-danger">{% trans "Delete" %}</a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-info">{% trans "Create your first budget to start receiving alerts." %}</div>
+{% endif %}
+{% endblock %}
